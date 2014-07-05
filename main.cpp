@@ -1,13 +1,12 @@
+#include <glew.h>
 #include <GLUT/glut.h>
-#include <iostream>
-
-using namespace std;
 
 void resize(int width, int height) {
     glViewport(0, 0, width, height);
 }
 
 void render() {
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glutSwapBuffers();
 }
