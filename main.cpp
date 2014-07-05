@@ -11,10 +11,14 @@ void render() {
     glutSwapBuffers();
 }
 
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 720
+
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize(800, 600);
+    glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - WINDOW_WIDTH) / 2, (glutGet(GLUT_SCREEN_HEIGHT) - WINDOW_HEIGHT) / 2);
     glutCreateWindow("Shaders");
     glutReshapeFunc(resize);
     glutDisplayFunc(render);
