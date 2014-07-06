@@ -1,29 +1,39 @@
-#include <glew.h>
-#include <GLUT/glut.h>
+#define GLEW_STATIC
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <stdio.h>
 
-void resize(int width, int height) {
-    glViewport(0, 0, width, height);
-}
+int main() {
+    // initialize glfw
+    glfwInit();
 
-void render() {
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glutSwapBuffers();
-}
+    // use at least opengl v3.2
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+   
+    // create a 1440x900 full screen window
+    GLFWwindow *window = glfwCreateWindow(1440, 900, "OpenGL", glfwGetPrimaryMonitor(), NULL);
 
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 720
+    // set the opengl context
+    glfwMakeContextCurrent(window);
 
-int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-    glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - WINDOW_WIDTH) / 2, (glutGet(GLUT_SCREEN_HEIGHT) - WINDOW_HEIGHT) / 2);
-    glutCreateWindow("Shaders");
-    glutReshapeFunc(resize);
-    glutDisplayFunc(render);
+    // initialize glew
+    glewExperimental = GL_TRUE;
+    glewInit();
 
-    glutMainLoop();
+    // main loop
+    while (!glfwWindowShouldClose(window)) {
+        glfwSwapBuffers(window);
+        glfwPollEvents();
 
+        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+            glfwSetWindowShouldClose(window, GL_TRUE);
+        }
+    }
+
+    glfwTerminate();
     return 0;
 }
+
