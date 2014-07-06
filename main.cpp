@@ -3,9 +3,9 @@
 #include "util.h"
 
 static const GLfloat vertices[] = {
-    0.0f, 0.5f,
-    0.5f, -0.5f,
-    -0.5f, -0.5f
+     0.0f,  0.5f, 1.0f, 0.0f, 0.0f,
+     0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
+    -0.5f, -0.5f, 0.0f, 0.0f, 1.0f
 };
 
 int main() {
@@ -44,9 +44,13 @@ int main() {
     glLinkProgram(shaderProgram);
     glUseProgram(shaderProgram);
 
-    GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
-    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(posAttrib);
+    GLint positionAttrib = glGetAttribLocation(shaderProgram, "position");
+    glVertexAttribPointer(positionAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
+    glEnableVertexAttribArray(positionAttrib);
+
+    GLint colorAttrib = glGetAttribLocation(shaderProgram, "color");
+    glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(2 * sizeof(float)));
+    glEnableVertexAttribArray(colorAttrib);
 
     GLint triangleColor = glGetUniformLocation(shaderProgram, "triangleColor");
     glUniform3f(triangleColor, 1.0f, 0.0f, 0.0f);
