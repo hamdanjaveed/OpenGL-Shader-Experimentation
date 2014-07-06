@@ -48,6 +48,9 @@ int main() {
     glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(posAttrib);
 
+    GLint triangleColor = glGetUniformLocation(shaderProgram, "triangleColor");
+    glUniform3f(triangleColor, 1.0f, 0.0f, 0.0f);
+
     // main loop
     while (!glfwWindowShouldClose(window)) {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
