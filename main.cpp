@@ -2,12 +2,6 @@
 #include <GLFW/glfw3.h>
 #include "util.h"
 
-static const GLfloat vertices[] = {
-     0.0f,  0.5f, 1.0f, 0.0f, 0.0f,
-     0.5f, -0.5f, 0.0f, 1.0f, 0.0f,
-    -0.5f, -0.5f, 0.0f, 0.0f, 1.0f
-};
-
 int main() {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -26,10 +20,27 @@ int main() {
     glGenVertexArrays(1, &vertexArrayObject);
     glBindVertexArray(vertexArrayObject);
 
+    const GLfloat vertices[] = {
+        -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // top left
+         0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // top right
+         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom right
+        -0.5f, -0.5f, 1.0f, 1.0f, 1.0f  // bottom left
+    };
+
     GLuint vertexBufferObject;
     glGenBuffers(1, &vertexBufferObject);
     glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    const GLuint elements[] = {
+        0, 1, 2,
+        2, 3, 0
+    };
+
+    GLuint elementBufferObject;
+    glGenBuffers(1, &elementBufferObject);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferObject);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements, GL_STATIC_DRAW);
 
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     loadAndCompileShader(vertexShader, (char *)"vertexShader.vsh");
@@ -64,7 +75,7 @@ int main() {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glDrawArrays(GL_TRIANGLES, 0, 3);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
