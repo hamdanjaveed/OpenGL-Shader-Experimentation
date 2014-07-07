@@ -81,6 +81,15 @@ int main() {
         glfwPollEvents();
     }
 
+    glDeleteProgram(shaderProgram);
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    glDeleteBuffers(1, &elementBufferObject);
+    glDeleteBuffers(1, &vertexBufferObject);
+
+    glDeleteVertexArrays(1, &vertexArrayObject);
+
     glfwTerminate();
     return 0;
 }
