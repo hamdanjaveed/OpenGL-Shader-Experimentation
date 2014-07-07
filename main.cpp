@@ -1,6 +1,9 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+#include <iostream>
 #include "util.h"
+
+using namespace std;
 
 int main() {
     glfwInit();
@@ -14,7 +17,7 @@ int main() {
 
     // initialize glew
     glewExperimental = GL_TRUE;
-    glewInit();
+    glewInit(); glGetError(); // this is to get rid of the 1280 error caused by glewInit()
 
     GLuint vertexArrayObject;
     glGenVertexArrays(1, &vertexArrayObject);
@@ -65,6 +68,16 @@ int main() {
 
     GLint triangleColor = glGetUniformLocation(shaderProgram, "triangleColor");
     glUniform3f(triangleColor, 1.0f, 0.0f, 0.0f);
+
+    GLint err;
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &err);
+    cout << "  Vertex shader : " << ((err == GL_TRUE) ? "OK" : "ERROR") << endl;
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &err);
+    cout << "Fragment shader : " << ((err == GL_TRUE) ? "OK" : "ERROR") << endl;
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &err);
+    cout << " Program Linked : " << ((err == GL_TRUE) ? "OK" : "ERROR") << endl;
+    GLenum genErr = glGetError();
+    cout << "  General Error : " << ((genErr != GL_NO_ERROR) ? "ERROR" : "OK") << endl;
 
     // main loop
     while (!glfwWindowShouldClose(window)) {
