@@ -24,10 +24,10 @@ int main() {
     glBindVertexArray(vertexArrayObject);
 
     const GLfloat vertices[] = {
-        -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // top left
-         0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // top right
-         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom right
-        -0.5f, -0.5f, 1.0f, 1.0f, 1.0f  // bottom left
+        -0.5f,  0.5f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, // top left
+         0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, // top right
+         0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f  // bottom left
     };
 
     GLuint vertexBufferObject;
@@ -59,15 +59,31 @@ int main() {
     glUseProgram(shaderProgram);
 
     GLint positionAttrib = glGetAttribLocation(shaderProgram, "position");
-    glVertexAttribPointer(positionAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), 0);
+    glVertexAttribPointer(positionAttrib, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), 0);
     glEnableVertexAttribArray(positionAttrib);
 
     GLint colorAttrib = glGetAttribLocation(shaderProgram, "color");
-    glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(2 * sizeof(float)));
+    glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *)(2 * sizeof(float)));
     glEnableVertexAttribArray(colorAttrib);
 
-    GLint triangleColor = glGetUniformLocation(shaderProgram, "triangleColor");
-    glUniform3f(triangleColor, 1.0f, 0.0f, 0.0f);
+    GLint texAttrib = glGetAttribLocation(shaderProgram, "textureCoord");
+    glEnableVertexAttribArray(texAttrib);
+    glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void*)(5 * sizeof(GLfloat)));
+
+    GLuint texture;
+    glGenTextures(1, &texture);
+
+    const GLfloat pixels[] = {
+        1.0f, 1.0f, 0.0f,   0.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 1.0f,   1.0f, 0.0f, 0.0f
+    };
+
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 2, 2, 0, GL_RGB, GL_FLOAT, pixels);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     GLint err;
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &err);
@@ -77,7 +93,9 @@ int main() {
     glGetProgramiv(shaderProgram, GL_LINK_STATUS, &err);
     cout << " Program Linked : " << ((err == GL_TRUE) ? "OK" : "ERROR") << endl;
     GLenum genErr = glGetError();
-    cout << "  General Error : " << ((genErr != GL_NO_ERROR) ? "ERROR" : "OK") << endl;
+    cout << "  General Error : " << ((genErr != GL_NO_ERROR) ? "ERROR - " : "OK");
+    if (genErr != GL_NO_ERROR) cout << genErr;
+    cout << endl;
 
     // main loop
     while (!glfwWindowShouldClose(window)) {
