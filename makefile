@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -Wall -g
-LDFLAGS = -framework OpenGL -L/usr/local/Cellar -lglew -lglfw3
+LDFLAGS = -framework OpenGL -L/usr/local/Cellar -lglew -lglfw3 -lpng
 
 myprogram: main.o util.o
 	${CC} ${CFLAGS} util.o main.o ${LDFLAGS} -o myprogram
