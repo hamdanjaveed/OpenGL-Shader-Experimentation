@@ -1,6 +1,6 @@
 #include <string>
 #include <fstream>
-#include <libpng16/png.h>
+#include <png.h>
 #include "util.h"
 
 // loads a file and returns a string
