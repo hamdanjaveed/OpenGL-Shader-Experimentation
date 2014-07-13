@@ -1,14 +1,16 @@
 #version 400
 
 in vec2 position;
-in vec3 color;
 in vec2 textureCoord;
 
-out vec3 Color;
+uniform int width;
+uniform int height;
+
 out vec2 TextureCoord;
+out vec2 TextureSize;
 
 void main() {
 	TextureCoord = textureCoord;
-	Color = color;
+	TextureSize = vec2(width, height);
     gl_Position = vec4(position, 0.0, 1.0);
 }

@@ -24,10 +24,10 @@ int main() {
     glBindVertexArray(vertexArrayObject);
 
     const GLfloat vertices[] = {
-        -0.5f,  0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // top left
-        0.5f,  0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, // top right
-        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, // bottom right
-        -0.5f, -0.5f, 1.0f, 1.0f, 0.0f, 0.0f, 0.0f  // bottom left
+        -0.5f,  0.5f, 0.0f, 1.0f, // top left
+        0.5f,  0.5f, 1.0f, 1.0f, // top right
+        0.5f, -0.5f, 1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f  // bottom left
     };
 
     GLuint vertexBufferObject;
@@ -59,21 +59,24 @@ int main() {
     glUseProgram(shaderProgram);
 
     GLint positionAttrib = glGetAttribLocation(shaderProgram, "position");
-    glVertexAttribPointer(positionAttrib, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(float), 0);
+    glVertexAttribPointer(positionAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), 0);
     glEnableVertexAttribArray(positionAttrib);
-
-    GLint colorAttrib = glGetAttribLocation(shaderProgram, "color");
-    glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 7 * sizeof(float), (void *)(2 * sizeof(float)));
-    glEnableVertexAttribArray(colorAttrib);
 
     GLint texAttrib = glGetAttribLocation(shaderProgram, "textureCoord");
     glEnableVertexAttribArray(texAttrib);
-    glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 7 * sizeof(GLfloat), (void *)(5 * sizeof(GLfloat)));
+    glVertexAttribPointer(texAttrib, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), (void *)(2 * sizeof(GLfloat)));
 
     GLuint texture;
     glGenTextures(1, &texture);
+    int width;
+    int height;
+    texture = loadPNG("niccage.png", &width, &height);
 
-    texture = loadPNG("niccage.png", NULL, NULL);
+    GLint widthUniform = glGetUniformLocation(shaderProgram, "width");
+    glUniform1i(widthUniform, width);
+
+    GLint heightUniform = glGetUniformLocation(shaderProgram, "height");
+    glUniform1i(heightUniform, height);
 
     GLint err;
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &err);
